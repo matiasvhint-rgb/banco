@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Copiado</title>
+<style>
+  body {font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; text-align: center; padding: 40px;}
+  button {padding: 10px 20px; font-size: 16px; border-radius: 8px;}
+</style>
+</head>
+<body>
+<h1>✅ Texto copiado</h1>
+<p id="msg">Si no se copió solo, toca el botón:</p>
+<button id="btn">Copiar de nuevo</button>
+<script>
+(async () => {
+  const u = new URL(location.href);
+  const text = u.searchParams.get("t") || "";
+  const copy = async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy"); ta.remove();
+      }
+      document.getElementById("msg").textContent = "¡Listo! Ya está en tu portapapeles.";
+    } catch(e) {
+      document.getElementById("msg").textContent = "No se pudo copiar automáticamente. Usa el botón.";
+    }
+  };
+  await copy();
+  document.getElementById("btn").onclick = copy;
+})();
+</script>
+</body>
+</html>
